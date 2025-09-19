@@ -173,7 +173,7 @@ stat /home/app
    # Para leer: gpg -d /home/Steve/Lista_Precios.gpg > /home/Steve/Lista_Precios
    ```
 
-**Identificaciones solicitadas por la consigna:**
+**Identificaciones:**
 - **Medidas**: permisos 700/600, bloqueo de sesión/cuentas separadas.
 - **Usuarios afectados**: “grupo” y “otros” (no Steve).
 - **Permisos a cambiar**: lectura/escritura/ejecución para grupo/otros (revocar).
