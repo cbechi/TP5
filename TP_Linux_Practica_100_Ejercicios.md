@@ -1,24 +1,13 @@
-# Práctica de Comandos Linux – Entregable
 
-**Alumno:** Charlie  
-**Entorno sugerido:** WSL/Ubuntu (o Linux similar)  
+**Alumno:** Carlos Bechi  
+**Entorno sugerido:** Ubuntu
 **Carpeta base de trabajo:** `~/tp_linux_practica`  
-**Convenciones:** Bloques `bash` listan comandos ejecutables; comentarios explican.
+**Convenciones:** Bloques `bash` listan comandos ejecutables; 
 
-> ⚠️ Algunas consignas impactan el sistema (p.ej., reinicio). Señalo alternativas o “dry‑run” cuando conviene.
-
----
-
-## Preparación
-```bash
-mkdir -p ~/tp_linux_practica && cd ~/tp_linux_practica
-pwd
-```
-Usaremos el directorio `PRUEBA` aquí dentro cuando la consigna lo requiera.
 
 ---
 
-## Ejercicios (1–100)
+## Ejercicios 
 
 ### 1. Listar todos los archivos del directorio `/bin`.
 ```bash
@@ -36,7 +25,7 @@ ls -1 /etc/t* | sort -r
 ```
 
 ### 4. Listar todos los archivos de `/dev` que empiecen por `tty` y tengan 5 caracteres.
-> Coinciden `tty??` (3 + 2 = 5).
+
 ```bash
 ls /dev/tty??
 ```
@@ -125,22 +114,18 @@ ls -l /tmp/PRUEBA/{dir1,dir2,dir3}/mensaje
 ```
 
 ### 21. Copiar los archivos del directorio `rc.d` dentro de `/etc` a `dir31`.
-> En sistemas modernos es `/etc/rc.d` o `/etc/init.d`. Intentamos ambos.
 ```bash
-src=""; [ -d /etc/rc.d ] && src="/etc/rc.d" || src="/etc/init.d"
 cp -r "$src"/* /tmp/PRUEBA/dir3/dir31/ 2>/dev/null
 ```
 
 ### 22. Copiar en `dir311` los archivos de `/bin` con 4 letras y segunda letra `a`.
-> Patrón: `_ a _ _` → `?a??`
 ```bash
 cp /bin/?a?? /tmp/PRUEBA/dir3/dir31/dir311/ 2>/dev/null
 ```
 
 ### 23. Copiar el directorio de otro usuario y sus subdirectorios debajo de `dir11`.
-> Sustituir `usuario_conocido` por uno real (p. ej., `root` si solo es para práctica).
 ```bash
-sudo cp -r /home/usuario_conocido /tmp/PRUEBA/dir1/dir11/ 2>/dev/null
+sudo cp -r /home/cbechi /tmp/PRUEBA/dir1/dir11/ 2>/dev/null
 ```
 
 ### 24. Mover `dir31` bajo `dir2`.
@@ -154,24 +139,21 @@ find ~ -type f -print
 ```
 
 ### 26. Ocultar el archivo `mensaje` de `dir3`.
-> Renombrar a archivo oculto (prefijo `.`).
 ```bash
 mv /tmp/PRUEBA/dir3/mensaje /tmp/PRUEBA/dir3/.mensaje
 ```
 
 ### 27. Borrar los archivos y directorios de `dir1`, incluido el propio directorio.
 ```bash
-rm -rf /tmp/PRUEBA/dir1
+sudo rm -rf /tmp/PRUEBA/dir1
 ```
 
 ### 28. Copiar a `dir312` los ficheros de `/dev` que empiecen por `t`, terminen en `[a-b]` y tengan 5 letras.
-> 5 letras → `t???[ab]`
 ```bash
 cp /dev/t???[ab] /tmp/PRUEBA/dir2/dir31/dir312/ 2>/dev/null
 ```
 
 ### 29. Borrar de `dir312` los que **no** acaben en `b` y tengan `q` como 4ª letra.
-> 4ª letra `q`: patrón `???q?`; “no acaben en b”: `*[^b]`
 ```bash
 find /tmp/PRUEBA/dir2/dir31/dir312 -type f -name '???q?*' ! -name '*b' -delete
 ```
@@ -192,16 +174,14 @@ cd /tmp/PRUEBA/dir3
 mkdir -p enlacedir1/nuevo1
 ```
 
-### 33. Copiar los archivos que empiecen por `u` de `/bin` a `nuevo1` (usando el enlace).
+### 33. Copiar los archivos que empiecen por `u` de `/bin` a `nuevo1`.
 ```bash
 cp /bin/u* enlacedir1/nuevo1/ 2>/dev/null
 ```
 
 ### 34. Crear dos enlaces **duros** de `fich1` llamados `enlace` en `dir1` y `dir2`.
 ```bash
-# Crear fichero base
-printf "contenido
-" > /tmp/PRUEBA/fich1
+printf "contenido" > /tmp/PRUEBA/fich1
 ln /tmp/PRUEBA/fich1 /tmp/PRUEBA/dir1/enlace 2>/dev/null || true
 ln /tmp/PRUEBA/fich1 /tmp/PRUEBA/dir2/enlace
 ```
@@ -218,7 +198,6 @@ ln -s /tmp/PRUEBA/dir2/enlace /tmp/PRUEBA/dir1/enlafich1
 ```
 
 ### 37. Desde `dir1`, copiar (mediante el enlace) el archivo `fich1` dentro de `dir311`.
-> El enlace apunta a `enlace` (hardlink de `fich1`). Copiamos a `dir311`.
 ```bash
 cd /tmp/PRUEBA/dir1
 cp enlafich1 /tmp/PRUEBA/dir2/dir31/dir311/
@@ -231,7 +210,6 @@ cat enlafich1
 ```
 
 ### 39. Borrar `fich1` de `dir2`.
-> Allí se llama `enlace` (hardlink). Borrarlo no pierde datos si quedan otros enlaces.
 ```bash
 rm -f /tmp/PRUEBA/dir2/enlace
 ```
@@ -264,9 +242,9 @@ ls -ld /tmp/PRUEBA/dir2
 ls -ld /tmp/PRUEBA/dir2
 ```
 
-### 45. Crear bajo `dir2` un directorio `dir2l` (fallará si no hay permisos de x/w).
+### 45. Crear bajo `dir2` un directorio `dir2l`.
 ```bash
-mkdir -p /tmp/PRUEBA/dir2/dir2l 2>/dev/null || echo "Falla por permisos (esperado)"
+mkdir -p /tmp/PRUEBA/dir2/dir2l
 ```
 
 ### 46. Concederse permiso de escritura en `dir2` e intentar de nuevo.
@@ -277,8 +255,7 @@ mkdir -p /tmp/PRUEBA/dir2/dir2l
 
 ### 47. Valores por omisión asignados a los archivos (umask).
 ```bash
-umask           # muestra la máscara actual
-# Archivos regulares típicamente 666 - umask; directorios 777 - umask
+umask 
 ```
 
 ### 48. Cambiar al directorio `dir3` e imprimir su trayectoria completa.
@@ -293,8 +270,7 @@ ls -ld /tmp/PRUEBA/dir3
 
 ### 50. Reiniciar el ordenador.
 ```bash
-# sudo reboot    # OMITIDO por seguridad en práctica
-```
+sudo reboot
 
 ### 51. Crear `dira`, `dirb`, `dirc`, `dird` bajo el directorio actual.
 ```bash
@@ -335,9 +311,15 @@ mkdir -p ~/carpeta2 && chmod 750 ~/carpeta2
 ls -l ~/carpeta1 ~/carpeta1/* ~/carpeta2 ~/carpeta2/*
 ```
 
-### 56. Desde otro usuario probar operaciones → guía (requiere sudo).
+### 56. Desde otro usuario probar operaciones.
 ```bash
-echo "Requiere crear usuario y probar accesos (omito por seguridad)."
+cd /home/usuario2/carpeta1 
+ls -l
+cat fich1
+echo "nuevo" >> fich1   
+cat fich2    
+echo "otro" >> fich2 
+
 ```
 
 ### 57. Traza completa del directorio actual; crear `correo` y `fuentes`.
@@ -425,7 +407,7 @@ find ~ -type f -user "$USR" -regex '.*[0-9]$' -exec cp -t ~/correo/menus {} +
 ### 72. Usuarios conectados y enviar mensaje a un terminal.
 ```bash
 who
-# Ejemplo de envío: echo "Hola!" | sudo tee /dev/pts/1 > /dev/null
+
 ```
 
 ### 73. Crear un archivo de tamaño 0.
@@ -570,13 +552,4 @@ pgrep -a bash && echo "bash en ejecución" || echo "bash no encontrado"
 ps -eo comm | grep -E '^k' | wc -l
 ```
 
----
 
-## Anexos
-```bash
-# Permisos en octal
-stat -c '%A %a %n' /tmp/PRUEBA/dir2 2>/dev/null
-
-# Ver umask creando archivo/directorio de prueba
-( umask; : > umask_test && ls -l umask_test && rm -f umask_test )
-```
